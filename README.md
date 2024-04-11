@@ -57,3 +57,4 @@ npm run publishPatchNPM
 
 - Publish scripts automatically run `syncMirror`. For it to work, you must have `mirror.conf.json` that has `path` key, which points to the folder of the mirror. Both root folder and mirror folders are recursively searched with a depth of `5`.
 - `azure.yaml` syncs a private azure repository. You can use it for other projects by changing the `REMOTE_ADDR` variable.
+- `sync-public.yml` is the `azure.yaml` equivalent of syncing public remote master with your fork. For it work, create a remote branch with name `public` and add `GIT_USER_NAME` and `GIT_USER_EMAIL` secrets to your repo.

@@ -1,0 +1,54 @@
+name: keepCloneUpToDate
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # 8:00 AM UTC daily
+  push:
+    branches:
+      - public
+  pull_request:
+    branches:
+      - public
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+env:
+  REMOTE_ADDR: 'https://github.com/IbrahimTanyalcin/I-PV.git'
+  BRANCH_NAME: 'public'
+
+jobs:
+  initiate:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/public'
+    steps:
+    - name: Checkout and Clean
+      uses: actions/checkout@v3
+      with:
+        repository: 'gsk-tech/I-PV'
+        ref: ${{ env.BRANCH_NAME }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        persist-credentials: true
+
+    - name: Configure Git
+      run: |
+        git config user.name ${{ secrets.GIT_USER_NAME }}
+        git config user.email ${{ secrets.GIT_USER_EMAIL }}
+        git remote add ipvGithub ${{ env.REMOTE_ADDR }}
+        git fetch ipvGithub master
+        git fetch --tags -f ipvGithub +master
+
+    - name: Rebase and Push Changes if Needed
+      run: |
+        if [ $(git rev-parse @) != $(git rev-parse ipvGithub/master) ]; then
+          echo "Commits NOT equal, rebasing"
+          git reset --hard ipvGithub/master
+          git pull --rebase ipvGithub master
+          git push --force origin ${{ env.BRANCH_NAME }}:${{ env.BRANCH_NAME }}
+          git push --tags --force origin ${{ env.BRANCH_NAME }}:${{ env.BRANCH_NAME }}
+        else
+          echo "Commits equal, no need to pull"
+        fi
