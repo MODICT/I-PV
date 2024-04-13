@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## NPM_0.1.24 - NPM_0.1.25
+## NPM_0.1.24 - NPM_0.1.26
 - Added `sync-public.yml` which is a `azure.yaml` equivalent of syncing public branch of your fork. Keep this workflow in your master
 if you want the scheduled cron jobs to take effect
 - Converted `http://` resources to protocol relative URIs in `i-pv/circos-p/templates/javascript.txt`
