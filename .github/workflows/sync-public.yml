@@ -22,7 +22,6 @@ env:
 jobs:
   initiate:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/public'
     steps:
     - name: Checkout and Clean
       uses: actions/checkout@v3

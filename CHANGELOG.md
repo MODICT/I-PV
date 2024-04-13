@@ -1,6 +1,11 @@
 # CHANGELOG
 
-# NPM_0.1.19 - NPM_0.1.23 / IPV_2.5
+## NPM_0.1.24 - NPM_0.1.25
+- Added `sync-public.yml` which is a `azure.yaml` equivalent of syncing public branch of your fork. Keep this workflow in your master
+if you want the scheduled cron jobs to take effect
+- Converted `http://` resources to protocol relative URIs in `i-pv/circos-p/templates/javascript.txt`
+
+## NPM_0.1.19 - NPM_0.1.23 / IPV_2.5
 
 - Below fields are now optional:
   - `variation.fileName`
