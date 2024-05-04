@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## NPM_0.1.27
+- Added an extra check at the `.github/workflows/sync-public.yml` to check if public exists to prevent the workflow from erring. To use the workflow replace `'your-user-name/your-repo'` with the correct values from your fork. This should synchronize your public branch with I-PV's master once a day.
+
 ## NPM_0.1.24 - NPM_0.1.26
 - Added `sync-public.yml` which is a `azure.yaml` equivalent of syncing public branch of your fork. Keep this workflow in your master
 if you want the scheduled cron jobs to take effect

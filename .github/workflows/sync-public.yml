@@ -18,21 +18,37 @@ permissions:
 env:
   REMOTE_ADDR: 'https://github.com/IbrahimTanyalcin/I-PV.git'
   BRANCH_NAME: 'public'
+  REPO_NAME: 'your-user-name/your-repo'
 
 jobs:
   initiate:
     runs-on: ubuntu-latest
     steps:
+    - name: Does a public branch exist
+      id: check_branch
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: branches } = await github.rest.repos.listBranches({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+          const branchExists = branches.some(branch => branch.name === '${{ env.BRANCH_NAME }}');
+          if (!branchExists) {
+            core.setFailed('Create a public branch for this workflow to proceed.');
+          }
     - name: Checkout and Clean
+      if: ${{ !failure() }}
       uses: actions/checkout@v3
       with:
-        repository: 'gsk-tech/I-PV'
+        repository: ${{ env.REPO_NAME }}
         ref: ${{ env.BRANCH_NAME }}
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
         persist-credentials: true
 
     - name: Configure Git
+      if: ${{ !failure() }}
       run: |
         git config user.name ${{ secrets.GIT_USER_NAME }}
         git config user.email ${{ secrets.GIT_USER_EMAIL }}
@@ -41,6 +57,7 @@ jobs:
         git fetch --tags -f ipvGithub +master
 
     - name: Rebase and Push Changes if Needed
+      if: ${{ !failure() }}
       run: |
         if [ $(git rev-parse @) != $(git rev-parse ipvGithub/master) ]; then
           echo "Commits NOT equal, rebasing"
