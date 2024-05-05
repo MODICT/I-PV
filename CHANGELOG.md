@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## NPM_0.1.27
+## NPM_0.1.27 - NPM_0.1.28
 - Added an extra check at the `.github/workflows/sync-public.yml` to check if public exists to prevent the workflow from erring. To use the workflow replace `'your-user-name/your-repo'` with the correct values from your fork. This should synchronize your public branch with I-PV's master once a day.
 
 ## NPM_0.1.24 - NPM_0.1.26

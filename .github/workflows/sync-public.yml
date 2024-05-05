@@ -14,6 +14,7 @@ on:
 permissions:
   contents: write
   issues: read
+  workflows: write
 
 env:
   REMOTE_ADDR: 'https://github.com/IbrahimTanyalcin/I-PV.git'
@@ -34,11 +35,9 @@ jobs:
             repo: context.repo.repo,
           });
           const branchExists = branches.some(branch => branch.name === '${{ env.BRANCH_NAME }}');
-          if (!branchExists) {
-            core.setFailed('Create a public branch for this workflow to proceed.');
-          }
+          core.setOutput('branch_exists', branchExists);
     - name: Checkout and Clean
-      if: ${{ !failure() }}
+      if: ${{ steps.check_branch.outputs.branch_exists == 'true' }}
       uses: actions/checkout@v3
       with:
         repository: ${{ env.REPO_NAME }}
@@ -48,7 +47,7 @@ jobs:
         persist-credentials: true
 
     - name: Configure Git
-      if: ${{ !failure() }}
+      if: ${{ steps.check_branch.outputs.branch_exists == 'true' }}
       run: |
         git config user.name ${{ secrets.GIT_USER_NAME }}
         git config user.email ${{ secrets.GIT_USER_EMAIL }}
@@ -57,7 +56,7 @@ jobs:
         git fetch --tags -f ipvGithub +master
 
     - name: Rebase and Push Changes if Needed
-      if: ${{ !failure() }}
+      if: ${{ steps.check_branch.outputs.branch_exists == 'true' }}
       run: |
         if [ $(git rev-parse @) != $(git rev-parse ipvGithub/master) ]; then
           echo "Commits NOT equal, rebasing"
