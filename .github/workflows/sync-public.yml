@@ -14,8 +14,7 @@ on:
 permissions:
   contents: write
   issues: read
-  workflows: write
-
+  
 env:
   REMOTE_ADDR: 'https://github.com/IbrahimTanyalcin/I-PV.git'
   BRANCH_NAME: 'public'
